@@ -31,11 +31,11 @@ While SAS Tech Support will not provide support for the content of VIRK, issues 
 # Index of tags for individual requirement checks within the playbook
 To see a list of tasks you can run:
   ```
-  ansible-playbook viya_pre_install_playook.yml -i inventory --list-tasks
+  ansible-playbook viya_pre_install_playbook.yml -i inventory --list-tasks
   ```
 Example running only a specific check or configuration:
   ```
-  ansible-playbook viya_pre_install_playook.yml -i inventory --tags memory_check
+  ansible-playbook viya_pre_install_playbook.yml -i inventory --tags memory_check
   ```
 These specific tags run the code that perform the pre-install checks and changes:
 * ping

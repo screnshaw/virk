@@ -1,2 +1,199 @@
-[targets]
-localhost ansible_connection=local
+## this is a sample inventory which contains all possible Host Groups for Viya 3.3
+## you should replace this with the actual inventory that comes with the Viya Deployment playbook
+## if you have one available.
+
+## This line defines the local Ansible Controller machine
+##    (are you sure it needs to have the pre-reqs applied to it?)
+deployTarget ansible_connection=local
+
+## This line defines another (not local) machine
+## Note that the _user and _key parameters are not mandatory,
+##   * if you remain the same user,
+##   * and the ssh keys are already defined in the right location (~/.ssh/id_rsa)
+deployTarget02 ansible_host=<machine_address> ansible_user=<userid> ansible_ssh_private_key_file=<keyfile>
+
+
+# The AdminServices host group contains services used to support administrative tasks that have transient load.
+[AdminServices]
+deployTarget
+
+# The AdvancedAnalytics host group contains services that provide advanced analytics features.
+[AdvancedAnalytics]
+deployTarget
+
+# The CASServices host group contains services used to interact between the CAS server(s) and the mid-tier services.
+[CASServices]
+deployTarget
+
+# The CognitiveComputingServices host group contains services for performing common text analytics tasks.
+[CognitiveComputingServices]
+deployTarget
+
+# The CommandLine host group contains command line interfaces for remote interaction with services.
+[CommandLine]
+deployTarget
+
+# The ComputeServer host group contains the Compute Server that executes SAS code on behalf of the Compute Service.
+[ComputeServer]
+deployTarget
+
+# The ComputeServices host group contains services for launching and accessing the SAS Compute Server.
+[ComputeServices]
+deployTarget
+
+# The CoreServices host group contains base-level services providing a common feature set to mid-tier services.
+# SAS Logon is part of this host group.
+[CoreServices]
+deployTarget
+
+# The DataMining host group contains services that provide data mining features.
+[DataMining]
+deployTarget
+
+# The DataServices host group contains services that provide data management features.
+[DataServices]
+deployTarget
+
+# The DecisionManager host group contains services that provide applications to support operational management and scoring for models, rules, and decisions.
+[DecisionManager]
+deployTarget
+
+# The HomeServices host group contains services that provide SAS Home and its features.
+[HomeServices]
+deployTarget
+
+# The MicroAnalyticService host group provides a multi-threaded, low latency program execution service to support execution of decisions, business rules and scoring models.
+[MicroAnalyticService]
+deployTarget
+
+# The ModelManager host group contains services to assist with organizing, managing and monitoring the contents and lifecycle of statistical and analytical models.
+[ModelManager]
+deployTarget
+
+# The ModelServices host group supports registering and organizing models in a common model repository, and publishing models to different destinations.
+# The microservices within this group can be integrated with other systems using the REST API.
+[ModelServices]
+deployTarget
+
+# The Operations host group contains services that accumulate metric, log, and notification events from RabbitMQ, then process those into CAS tables which are consumed by the SAS Environment Manager application.
+# The Operations services utilize applications supplied by the programming host group, so specify a target host that is included in the programming host group.
+#
+# The Operations host group does not support multiple hosts at this time.
+# Do not put more than one host in the Operations host group.
+[Operations]
+deployTarget
+
+# The ReportServices host group contains services that provide report management features.
+[ReportServices]
+deployTarget
+
+# The ReportViewerServices host group contains services that provide report viewing features.
+[ReportViewerServices]
+deployTarget
+
+# The ScoringServices host group supports definition and execution of scoring jobs for models and other SAS content.
+[ScoringServices]
+deployTarget
+
+# The ThemeServices host group contains services that provide theme management features.
+[ThemeServices]
+deployTarget
+
+# The VisualForecasting host group contains the services for SAS Visual Forecasting.
+[VisualForecasting]
+deployTarget
+
+# The VisualTextAnalytics host group contains services that provide text analytics features.
+[VisualTextAnalytics]
+deployTarget
+
+# The WorkflowManager host group contains services and applications to assist with creating workflow definitions, and managing and reporting on in-progress and historical workflow processes.
+[WorkflowManager]
+deployTarget
+
+# The configuratn host group contains the service that manages customizable configuration for the SAS environment.
+[configuratn]
+deployTarget
+
+# The consul host group contains the Consul server.
+[consul]
+deployTarget
+
+# The httpproxy host group contains HTTP Proxy Server.
+[httpproxy]
+deployTarget
+
+# The pgpoolc host group contains PG Pool for High Availability PostgreSQL.
+[pgpoolc]
+deployTarget
+
+# The programming host group contains SAS Foundation, SAS Studio, SAS Workspace Server, SAS/CONNECT and any SAS/ACCESS engines.
+# If you put more than one host in this group, multiple instances of each are created but they do not talk to each other.
+# Failover between the instances does not exist.
+[programming]
+deployTarget
+
+# The rabbitmq host group contains Rabbit MQ, a messaging broker.
+# The deployment will take the first entry in this host list as the "primary"
+# machine to initialize the cluster. After that deployment, if you adjust the
+# inventory and place a different entry as the first Rabbit MQ machine, you will
+# run the risk two distinct Rabbit MQ clusters running independently with no
+# knowledge of each other and messages split between the two.
+[rabbitmq]
+deployTarget
+
+# The sas-casserver-primary host group contains the CAS controller node.
+# Multiple instances of the CAS Controller node are not currently supported.
+# Do not put more than one host in the sas-casserver-primary host group.
+[sas-casserver-primary]
+deployTarget
+
+# The sas-casserver-secondary host group contains the CAS failover controller node.
+# This node takes over for the CAS controller node if it fails.
+# SAS recommends that each CAS cluster have a CAS failover controller node.
+# Each CAS cluster can have only one CAS failover controller node.
+[sas-casserver-secondary]
+
+# The sas-casserver-worker host group contains CAS worker node.
+[sas-casserver-worker]
+
+# The sasdatasvrc host group contains SAS PostgreSQL.
+[sasdatasvrc]
+deployTarget
+
+# [sas-all:children] contains each host group used in your SAS deployment. Do not alter its contents.
+# See your deployment guide for more details.
+[sas-all:children]
+AdminServices
+AdvancedAnalytics
+CASServices
+CognitiveComputingServices
+CommandLine
+ComputeServer
+ComputeServices
+CoreServices
+DataMining
+DataServices
+DecisionManager
+HomeServices
+MicroAnalyticService
+ModelManager
+ModelServices
+Operations
+ReportServices
+ReportViewerServices
+ScoringServices
+ThemeServices
+VisualForecasting
+VisualTextAnalytics
+WorkflowManager
+configuratn
+consul
+httpproxy
+pgpoolc
+programming
+rabbitmq
+sas-casserver-primary
+sas-casserver-secondary
+sas-casserver-worker
+sasdatasvrc

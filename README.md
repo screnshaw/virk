@@ -33,11 +33,12 @@ limitations under the License.
 ## Pre-requisites for VIRK
 Each item included here in the resource kit will detail its specific pre-requisite and functionality.
 
-As an example, a functioning [Ansible Controller](http://docs.ansible.com/ansible/latest/intro_installation.html) is required for the Ansible playbooks contained in [Pre-Installation](playbooks/pre-install-playbook) playbook section.
+As an example, a functioning [Ansible Controller](http://docs.ansible.com/ansible/latest/intro_installation.html) is required for the Ansible playbooks contained in the Pre-Installation playbook section. A list of those playbooks is listed below in the [Index of tools](#index-of-tools) section.
 
 ## Support
 While SAS Tech Support will not provide support for the content of this resource kit, issues and/or pull requests in GitHub are welcome.
 
 # Index of tools
 
-* [Viya Pre-Install Playbook](playbooks/pre-install-playbook/README.md)
+* [Viya 3.2 Pre-Install Playbook](../viya-3.2/playbooks/pre-install-playbook/README.md)
+* [Viya 3.3 Pre-Install Playbook](../viya-3.3/playbooks/pre-install-playbook/README.md)

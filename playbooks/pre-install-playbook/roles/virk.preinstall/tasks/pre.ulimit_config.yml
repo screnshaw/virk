@@ -1,0 +1,130 @@
+---
+
+####################################################################
+## Ulimit Config
+####################################################################
+# Test harness:
+#   make it pass
+#     ansible-playbook viya_pre_install_playbook.yml --tags ulimit_config -e use_pause=0
+#   make it fail
+#
+
+- block:
+  ## block start
+
+  ## only do this if the CAS user exist. If not, skip the whole thing.
+  - name: check if the cas account exitst
+    shell:  "getent passwd {{cas_user}} > /dev/null "
+    changed_when: False
+    check_mode: no
+    register: check_cas_user
+    failed_when: false
+    tags:
+      - casuser
+
+  - name: Show whether the cas account exists or not
+    debug: var=check_cas_user
+    tags:
+      - casuser
+
+  - name: Inform user of skipped ulimits checks.
+    debug:
+      msg:
+        - "the cas user ({{cas_user}}) does not seem to exist."
+        - "that user would be used to check ulimit values. "
+        - "this check will be skipped until {{cas_user}} exists"
+    when: check_cas_user.rc | int != 0
+    tags:
+      - casuser
+
+  - block:
+
+    ## gather ulimit values - needs to be done as a regular user (cas)
+    - name: Gather the current Ulimit values (soft nofile) for user "{{cas_user}}"
+      become: yes
+      become_user: "{{cas_user}}"
+      shell: ulimit -n -S
+      changed_when: False
+      check_mode: no
+      register: ulimit_soft_nofile
+
+    - name: Gather the current Ulimit values (hard nofile) for user "{{cas_user}}"
+      become: yes
+      become_user: "{{cas_user}}"
+      shell: ulimit -n -H
+      changed_when: False
+      check_mode: no
+      register: ulimit_hard_nofile
+
+    - name: Gather the current Ulimit values (soft nproc) for user "{{cas_user}}"
+      become: yes
+      become_user: "{{cas_user}}"
+      shell: ulimit -u -S
+      changed_when: False
+      check_mode: no
+      register: ulimit_soft_nproc
+
+    ## display values
+    - name: Show the value of ulimit_soft_nofile
+      debug: var=ulimit_soft_nofile.stdout
+    - name: Show the value of ulimit_hard_nofile
+      debug: var=ulimit_hard_nofile.stdout
+    - name: Show the value of ulimit_soft_nproc
+      debug: var=ulimit_soft_nproc.stdout
+
+    ## no updates needed nofile ulimit
+    - block:
+      - name: Show the message when no update is needed for nofile ulimit
+        debug: msg="Your current nofile ulimit value ({{ulimit_soft_nofile.stdout}}(soft)/{{ulimit_hard_nofile.stdout}}(hard)) is greater or equal than desired value ({{ulimit_nofile_val}}) \n There is no need to udpate it"
+      when: ulimit_soft_nofile is defined and (ulimit_soft_nofile.stdout | int >= ulimit_nofile_val | int or ulimit_hard_nofile.stdout | int >= ulimit_nofile_val | int )
+
+    ## update nofile ulimit
+    - block:
+      - name: Show the message when updates are needed for nofile ulimit
+        debug: msg="Your current nofile ulimit value ({{ulimit_soft_nofile.stdout}}(soft)/{{ulimit_hard_nofile.stdout}}(hard)) is less than desired value ({{ulimit_nofile_val}}) \n We will update the value"
+      - name: Adjust limits in /etc/security/limits.d/va81.conf
+        blockinfile:
+          dest: /etc/security/limits.d/va81.conf
+          backup: yes
+          create: yes
+          owner: root
+          group: root
+          mode: 0644
+          marker: "#### -- {mark} VDMML 8.1 prereqs - ulimits - nofile"
+          insertafter: EOF
+          block: |
+            @{{sas_group}}       -    nofile    {{ulimit_nofile_val}}
+      when: ulimit_soft_nofile is defined and (ulimit_soft_nofile.stdout | int < ulimit_nofile_val |int or ulimit_hard_nofile.stdout | int < ulimit_nofile_val | int)
+
+    ## no need to update nproc ulimits
+    - block:
+      - name: Show the message when no updates are needed for nproc ulimit
+        debug: msg="Your current nproc ulimit value ({{ulimit_soft_nproc.stdout}}) is greater or equal than desired value ({{ulimit_soft_nproc_val}}) \n There is no need to udpate it"
+      when: ulimit_soft_nproc is defined and ( (ulimit_soft_nproc.stdout | int) >= ulimit_soft_nproc_val | int)
+
+    ## update nproc
+    - block:
+      - name: Show the message when updates are needed for nproc ulimit
+        debug: msg="Your current nproc ulimit value ({{ulimit_soft_nproc.stdout}}) is less than desired value ({{ulimit_soft_nproc_val}}) \n We will update the value"
+      - name: Adjust limits in /etc/security/limits.d/va81.conf
+        blockinfile:
+          dest: /etc/security/limits.d/va81.conf
+          backup: yes
+          create: yes
+          owner: root
+          group: root
+          mode: 0644
+          marker: "#### -- {mark} VDMML 8.1 prereqs - ulimits - nproc"
+          insertafter: EOF
+          block: |
+            @{{sas_group}}       soft  nproc  {{ulimit_soft_nproc_val}}
+            @{{sas_group}}       hard  nproc  {{ulimit_soft_nproc_val}}
+      when: ulimit_soft_nproc is defined and ((ulimit_soft_nproc.stdout | int) < ulimit_soft_nproc_val | int)
+
+    when: (check_cas_user.rc | int) == 0
+    tags:
+      - ulimit
+
+  ## block end
+  tags:
+    - ulimit_config

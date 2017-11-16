@@ -44,6 +44,12 @@ maxstartups_val: 100
 ulimit_nofile_val: 150000
 ulimit_soft_nproc_val: 65536
 
+ulimits:
+  - { domain: '*' , type: '-' , item: nofile , value: 150000 , use_max: yes , use_min: no , comment: "Added for Viya {{viya_version}} Installation - " }
+  - { domain: "{{sas_user}}" , type: '-' , item: stack , value: 10240 , use_max: yes , use_min: no , comment: "Added for Viya {{viya_version}} Installation - " }
+  - { domain: "*" , type: '-' , item: nproc , value: 100000 , use_max: yes , use_min: no , comment: "Added for Viya {{viya_version}} Installation - " }
+
+
 # max_hostname_length: 64       ## official number from the doc
 max_hostname_length: 58        ## better number, SAS note is yet to be written.
 

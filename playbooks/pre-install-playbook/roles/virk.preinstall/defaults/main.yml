@@ -32,7 +32,7 @@ storage_list:
   #
 
 ## Minimum total Memory on each machine
-min_mem_mb: 40000
+min_mem_mb: 80000
 
 ## Minimum number of cores on each machine
 min_cores_num: 4
@@ -41,7 +41,7 @@ min_cores_num: 4
 maxstartups_val: 100
 
 ## ulimit values
-ulimit_nofile_val: 20480
+ulimit_nofile_val: 150000
 ulimit_soft_nproc_val: 65536
 
 # max_hostname_length: 64       ## official number from the doc

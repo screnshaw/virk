@@ -15,4 +15,5 @@
 - import_tasks: pre.os_firewall_config.yml
 - import_tasks: pre.ntp_config.yml
 - import_tasks: pre.network_and_bandwidth_check.yml
+- import_tasks: pre.timeouts_config.yml
 - import_tasks: pre.other.yml

@@ -107,6 +107,10 @@ max_num_nics: 1
 required_ansible_min_version: "2.2"
 required_python_min_version: "2.6"
 
+
+DefaultTimeoutStopSec: 1800s
+DefaultTimeoutStartSec: 1800s
+
 ## do a 60 seconds pause at the begginning if not using the --check option
 use_pause: true
 

@@ -111,6 +111,9 @@ required_python_min_version: "2.6"
 DefaultTimeoutStopSec: 1800s
 DefaultTimeoutStartSec: 1800s
 
+
+swappiness: 1
+
 ## do a 60 seconds pause at the begginning if not using the --check option
 use_pause: true
 

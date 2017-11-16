@@ -17,4 +17,5 @@
 - import_tasks: pre.network_and_bandwidth_check.yml
 - import_tasks: pre.timeouts_config.yml
 - import_tasks: pre.swappiness_config.yml
+- import_tasks: pre.semaphores_config.yml
 - import_tasks: pre.other.yml

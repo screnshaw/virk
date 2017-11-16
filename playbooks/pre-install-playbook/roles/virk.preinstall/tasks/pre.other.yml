@@ -18,3 +18,11 @@
     ignore_errors: yes
     tags:
       - mail
+
+
+# restricting ephemeral port range
+  # - name: "Ephemeral port range"
+  #   sysctl:
+  #     name: net.ipv4.ip_local_port_range
+  #     value: "50000 55000"
+  #     state: present

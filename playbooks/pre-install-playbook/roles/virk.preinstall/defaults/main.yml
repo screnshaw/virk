@@ -107,7 +107,13 @@ sas_yum_urls:
   - sesbw.sas.download
 
 ## maximum number of network interfaces (excluding loopback)
-max_num_nics: 1
+max_num_nics: 1             ## maximum number of network interfaces (excluding loopback)
+## the command used to count active NICs
+#nic_count_command: "ls -A /sys/class/net | grep -v lo | wc -l"
+#nic_count_command: "netstat -i|grep -ve ^lo -e ^Iface -e ^Kernel | wc -l"
+nic_count_command: "ip link show up | grep -ve link -e ': lo:' | wc -l"
+
+
 
 ## third-party software requirements
 required_ansible_min_version: "2.2"

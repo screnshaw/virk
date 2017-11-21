@@ -12,7 +12,7 @@
   ## block start
 
   - name: "Count the number of NICs (other than loopback)"
-    shell: "ls -A /sys/class/net | grep -v lo | wc -l"
+    shell: "{{nic_count_command}}"
     changed_when: False
     check_mode: no
     register: numnics
@@ -32,8 +32,9 @@
         - "This server seems to have {{numnics.stdout|int}} Network Interfaces."
         - "It should only have {{max_num_nics|int}}."
         - "This will require more work to successfully deploy consul."
-        - "Please read the following SAS Note for details on how to deal with it :<todo>"
-        - "Add --skip-tags skipnicssfail to suppress this message."
+        - "Please read the Deployment guide and search for the reference to the following parameter:"
+        - "   consul_bind_adapter=   "
+        - "Add --skip-tags skipnicssfail to suppress this failure and message."
     tags:
       - nics
       - skipifbelowspecs

@@ -44,10 +44,33 @@ maxstartups_val: 100
 ulimit_nofile_val: 150000
 ulimit_soft_nproc_val: 65536
 
+# dealing with ulimits:
+ulimit_file_loc: /etc/security/limits.d/viya_3.3_limits.conf
 ulimits:
-  - { domain: '*' , type: '-' , item: nofile , value: 150000 , use_max: yes , use_min: no , comment: "Added for Viya {{viya_version}} Installation - " }
-  - { domain: "{{sas_user}}" , type: '-' , item: stack , value: 10240 , use_max: yes , use_min: no , comment: "Added for Viya {{viya_version}} Installation - " }
-  - { domain: "*" , type: '-' , item: nproc , value: 100000 , use_max: yes , use_min: no , comment: "Added for Viya {{viya_version}} Installation - " }
+  -
+    comment: "#Added (1) for Viya Installation"
+    domain: "*"
+    item: nofile
+    type: "-"
+    use_max: true
+    use_min: false
+    value: 150000
+  -
+    comment: "#Added (2) for Viya Installation"
+    domain: "{{sas_user}}"
+    item: stack
+    type: "-"
+    use_max: true
+    use_min: false
+    value: 10240
+  -
+    comment: "#Added (3) for Viya Installation"
+    domain: "*"
+    item: nproc
+    type: "-"
+    use_max: true
+    use_min: false
+    value: 100000
 
 
 # max_hostname_length: 64       ## official number from the doc

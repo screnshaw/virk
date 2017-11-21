@@ -1,6 +1,5 @@
 ---
-- name:
-  block:
+- block:
   - name: "Set swappiness to {{swappiness}} in /etc/sysctl.conf"
     become: yes
     become_user: root

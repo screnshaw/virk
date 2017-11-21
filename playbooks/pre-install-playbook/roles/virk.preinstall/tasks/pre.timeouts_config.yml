@@ -1,6 +1,5 @@
 ---
-- name: Configure timeouts for systemd services, for RHEL 7.x and above
-  block:
+- block:
 
   - name: Change default timeouts in /etc/systemd/system.conf (1/2)
     become: yes

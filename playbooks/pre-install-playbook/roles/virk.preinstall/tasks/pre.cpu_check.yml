@@ -25,11 +25,7 @@
     debug: var=detailedcpuinfo.stdout_lines
 
   - name: Querying number of CPUs from /proc/cpuinfo
-    # commenting out because this does not work well on OpenStack
-    #shell: "cat /proc/cpuinfo | grep 'cpu cores' | uniq | awk -F'[:]' '{print $2}' "
-    # instead, I found this command which seems to work better. https://access.redhat.com/discussions/480953
-    ## note that this does not seem to work on Oracle Linux. :-(
-    shell: "egrep -e 'core id' -e ^physical /proc/cpuinfo|xargs -l2 echo|sort -u | wc -l"
+    shell: "{{core_count_command}}"
     changed_when: False
     check_mode: no
     register: cpuinfo

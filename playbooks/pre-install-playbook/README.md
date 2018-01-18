@@ -37,21 +37,3 @@ Example running only a specific check or configuration:
   ```
   ansible-playbook viya_pre_install_playbook.yml -i inventory --tags memory_check
   ```
-These specific tags run the code that perform the pre-install checks and changes:
-* ping
-* os_name_check
-* os_version_check
-* memory_check
-* cpu_check
-* storage_check
-* third_party_check
-* hostname_length_check
-* yum_cache_config
-* ssh_maxstartups_config
-* required_packages_config
-* selinux_config
-* user_and_group_config
-* ulimit_config
-* network_and_bandwidth_check
-* os_firewall_config
-* ntp_config

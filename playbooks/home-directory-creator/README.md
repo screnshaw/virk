@@ -22,7 +22,7 @@ This playbook will modify the various sasauth files so they call a script that t
 
 To run the script, execute :
 ```
-ansible-playbook gel.homedirectory.yml -i <your.inventory.ini>
+ansible-playbook home-directory-creator.yml -i <your.inventory.ini>
 ```
 * --check: Executes a "dry run" of the playbook. Runs the playbook without making changes to the system. Any module instrumented to support ‘check mode’ will report what changes they would have made rather than making them.
 * -v through -vvvv: Allows you to increase the verbosity of the script output; -vvvv enables connection debugging.
@@ -33,7 +33,7 @@ ansible-playbook gel.homedirectory.yml -i <your.inventory.ini>
 
 To see a list of tasks you can run:
 ```
-ansible-playbook gel.homedirectory.yml -i inventory --list-tasks
+ansible-playbook home-directory-creator.yml -i inventory --list-tasks
 ```
 These specific tags run the code that perform the home directory configuration checks and changes:
 * service

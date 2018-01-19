@@ -1,0 +1,65 @@
+####################################################################
+#### vi_pre_install_playbook.yml                                ####
+####################################################################
+#### Author: SAS Institute Inc.                                 ####
+####                                                            ####
+####  WARNING: this playbook only works                         ####
+####           with Ansible 2.2 and above.                      ####
+####                                                            ####
+####################################################################
+
+####################################################################
+#### DISCLAIMER                                                 ####
+####################################################################
+#### This Ansible Playbook is provided as-is, without warranty  ####
+#### of any kind, either express or implied, including, but not ####
+#### limited to, the implied warranties of merchantability,     ####
+#### fitness for a particular purpose, or non-infringement.     ####
+#### SAS Institute shall not be liable whatsoever for any       ####
+#### damages arising out of the use of this documentation and   ####
+#### code, including any direct, indirect, or consequential     ####
+#### damages. SAS Institute reserves the right to alter or      ####
+#### abandon use of this documentation and code at any time.    ####
+#### In addition, SAS Institute will provide no support for the ####
+#### materials contained herein.                                ####
+####################################################################
+
+
+####################################################################
+#
+# This playbook verifies and possibly performs many of the
+# pre-requisites for a generic Viya deployment.
+#
+# to see an index of the things it does, run:
+#        ansible-playbook vi_pre_install_playbook.yml --list-tasks
+#
+# to see how far from the desired state you are, run:
+#        ansible-playbook vi_pre_install_playbook.yml --check
+#
+# to let the playbook make all the required changes and bring you
+# to the desired state, run:
+#        ansible-playbook vi_pre_install_playbook.yml
+#
+# useful tags to know:
+#
+#  - skipifbelowspecs: allows the playbook to run even if your
+#    servers do not meet the specs (CPU, Mem, Storage)
+#
+#         If you server(s) fails one of the specs tests, the error
+#         message will tell you how to bypass that check.
+#
+#  - detectableonly: tasks where we can detect the wrong or right
+#    config, but can't fix it
+#
+#  - fixable:  tasks where we can both
+#
+####################################################################
+
+---
+# if you want everything to apply to all machines.
+# using all the default values (from roles/virk.preinstall/defaults/main.yml)
+- hosts: sas-all
+  become: yes
+  become_user: root
+  roles:
+   - virk.preinstall

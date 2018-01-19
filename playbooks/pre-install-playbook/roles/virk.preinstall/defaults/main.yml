@@ -32,17 +32,53 @@ storage_list:
   #
 
 ## Minimum total Memory on each machine
-min_mem_mb: 40000
+min_mem_mb: 80000
 
 ## Minimum number of cores on each machine
 min_cores_num: 4
+## command used to count the cores:
+    # commenting out because this does not work well on OpenStack
+    # "cat /proc/cpuinfo | grep 'cpu cores' | uniq | awk -F'[:]' '{print $2}' "
+    # instead, I found this command which seems to work better. https://access.redhat.com/discussions/480953
+    ## note that this does not seem to work on Oracle Linux. :-(
+# core_count_command: egrep -e 'core id' -e ^physical /proc/cpuinfo | xargs -l2 echo|sort -u | wc -l
+core_count_command: "echo $((`getconf _NPROCESSORS_ONLN` / (  `grep 'siblings' /proc/cpuinfo | awk -F'[: ]' '{print $3}' | sort | uniq` / `grep 'cpu cores' /proc/cpuinfo | awk -F'[: ]' '{print $4}' | sort | uniq` )  ))"
 
 ## SSH Max Startups
 maxstartups_val: 100
 
 ## ulimit values
-ulimit_nofile_val: 20480
+ulimit_nofile_val: 150000
 ulimit_soft_nproc_val: 65536
+
+# dealing with ulimits:
+ulimit_file_loc: /etc/security/limits.d/viya_3.3_limits.conf
+ulimits:
+  -
+    comment: "#Added (1) for Viya Installation"
+    domain: "*"
+    item: nofile
+    type: "-"
+    use_max: true
+    use_min: false
+    value: 150000
+  -
+    comment: "#Added (2) for Viya Installation"
+    domain: "{{sas_user}}"
+    item: stack
+    type: "-"
+    use_max: true
+    use_min: false
+    value: 10240
+  -
+    comment: "#Added (3) for Viya Installation"
+    domain: "*"
+    item: nproc
+    type: "-"
+    use_max: true
+    use_min: false
+    value: 100000
+
 
 # max_hostname_length: 64       ## official number from the doc
 max_hostname_length: 58        ## better number, SAS note is yet to be written.
@@ -101,11 +137,29 @@ sas_yum_urls:
   - sesbw.sas.download
 
 ## maximum number of network interfaces (excluding loopback)
-max_num_nics: 1
+max_num_nics: 1             ## maximum number of network interfaces (excluding loopback)
+## the command used to count active NICs
+#nic_count_command: "ls -A /sys/class/net | grep -v lo | wc -l"
+#nic_count_command: "netstat -i|grep -ve ^lo -e ^Iface -e ^Kernel | wc -l"
+nic_count_command: "ip link show up | grep -ve link -e ': lo:' | wc -l"
+
+
 
 ## third-party software requirements
 required_ansible_min_version: "2.2"
 required_python_min_version: "2.6"
+
+
+DefaultTimeoutStopSec: 1800s
+DefaultTimeoutStartSec: 1800s
+
+
+semaphores:
+  - { name: kernel.sem        , value: 512 32000 256 1024 }
+  - { name: net.core.somaxconn, value: 2048 }
+
+
+swappiness: 1
 
 ## do a 60 seconds pause at the begginning if not using the --check option
 use_pause: true

@@ -3,10 +3,16 @@
 ## User and Group Config
 ####################################################################
 # Test harness
-# this should fail quick because group name is already in use
-#  ansible-playbook viya_pre_install_playbook.yml --tags user_and_group_config -e "use_pause=0" --extra-vars '{"custom_group_list": {  "group": "root" , "gid":"2500"  }     }'
-#  ansible-playbook viya_pre_install_playbook.yml --tags user_and_group_config -e "use_pause=0" --extra-vars '{"custom_group_list": {  "group": "weirdname" , "gid":"0"  }     }'
-#  ansible-playbook viya_pre_install_playbook.yml --tags user_and_group_config -e "use_pause=0" --extra-vars '{"custom_group_list": {  "group": "sas" , "gid":"1001"  }     }'
+## group already exists with different gid
+#  ansible-playbook va_pre_install_playbook.yml --tags user_and_group_config -e "use_pause=0" --extra-vars '{"custom_group_list": {  "group": "root" , "gid":"2500"  }     }'
+## gid is already taken
+#  ansible-playbook va_pre_install_playbook.yml --tags user_and_group_config -e "use_pause=0" --extra-vars '{"custom_group_list": {  "group": "weirdname" , "gid":"0"  }     }'
+## user exists with alternative uid
+#  ansible-playbook va_pre_install_playbook.yml --tags user_and_group_config -e "use_pause=0" --extra-vars '{"custom_user_list": {  "name": "root" , "uid":"9999" , "group":"root" , "groups":"root" }     }'
+## uid is already taken
+#  ansible-playbook va_pre_install_playbook.yml --tags user_and_group_config -e "use_pause=0" --extra-vars '{"custom_user_list": {  "name": "notroot" , "uid":"0" , "group":"root" , "groups":"root" }     }'
+
+
 
 - block:
   ## block start
@@ -37,8 +43,11 @@
       msg:
         - "We looked for the group '{{item.item.group}}'. (getent group {{item.item.group}})"
         - "We found that this group already exists and has a GID of {{item.stdout}}"
-        - "We were expecting a GID of {{item.item.gid}}"
-        - "Review the 'custom_group_list' variable."
+        - "In your variables file, you stated that group '{{item.item.group}}' should have a GID of '{{item.item.gid}}'"
+        - "Therefore, we are not making any changes. You can do one of the following:"
+        - " - Review the content of the 'custom_group_list' variable to make it match your existing group(s)"
+        - " - Add  -e 'create_local_cas_and_sas_accounts=false'   to the command so that it does not verify or create accounts"
+        - " - Add  --skip-tags user_and_group_config   to have ansible skip the entire section about users and groups"
     with_items:
       - "{{gather_gid.results}}"
     when: create_local_cas_and_sas_accounts == true
@@ -78,8 +87,11 @@
       msg:
         - "We looked for the GID '{{item.item.gid}}'. (getent group {{item.item.gid}})"
         - "We found that this GID is already assigned but to the group '{{item.stdout}}'"
-        - "We were expecting a group of '{{item.item.group}}'"
-        - "Review the 'custom_group_list' variable."
+        - "In your variables file, you stated that group '{{item.item.group}}' should have a GID of '{{item.item.gid}}', but it seems to already belong to group '{{item.item.group}}'"
+        - "Therefore, we are not making any changes. You can do one of the following:"
+        - " - Review the content of the 'custom_group_list' variable to make it match your existing group(s)"
+        - " - Add  -e 'create_local_cas_and_sas_accounts=false'   to the command so that it does not verify or create accounts"
+        - " - Add  --skip-tags user_and_group_config   to have ansible skip the entire section about users and groups"
     with_items:
       - "{{gather_group.results}}"
     when: create_local_cas_and_sas_accounts == true
@@ -131,8 +143,11 @@
       msg:
         - "We looked for the user '{{item.item.name}}'. (getent passwd {{item.item.name}})"
         - "We found that this user already exists and has a UID of {{item.stdout}}"
-        - "We were expecting a UID of {{item.item.uid}}"
-        - "Review the 'custom_user_list' variable."
+        - "In your variables file, you stated that user '{{item.item.name}}' should have a UID of '{{item.item.uid}}'"
+        - "Therefore, we are not making any changes. You can do one of the following:"
+        - " - Review the content of the 'custom_user_list' variable to make it match your existing users(s)"
+        - " - Add  -e 'create_local_cas_and_sas_accounts=false'   to the command so that it does not verify or create accounts"
+        - " - Add  --skip-tags user_and_group_config   to have ansible skip the entire section about users and groups"
     with_items:
       - "{{gather_uid.results}}"
     when: create_local_cas_and_sas_accounts == true
@@ -165,8 +180,11 @@
       msg:
         - "We looked for the UID '{{item.item.uid}}'. (getent group {{item.item.uid}})"
         - "We found that this UID is already assigned but to the user '{{item.stdout}}'"
-        - "We were expecting a user of '{{item.item.name}}'"
-        - "Review the 'custom_user_list' variable."
+        - "In your variables file, you stated that user '{{item.item.name}}' should have a UID of '{{item.item.uid}}', but it seems to already belong to '{{item.stdout}}'"
+        - "Therefore, we are not making any changes. You can do one of the following:"
+        - " - Review the content of the 'custom_user_list' variable to make it match your existing user(s)"
+        - " - Add  -e 'create_local_cas_and_sas_accounts=false'   to the command so that it does not verify or create accounts"
+        - " - Add  --skip-tags user_and_group_config   to have ansible skip the entire section about users and groups"
     with_items:
       - "{{gather_name.results}}"
     when: create_local_cas_and_sas_accounts == true

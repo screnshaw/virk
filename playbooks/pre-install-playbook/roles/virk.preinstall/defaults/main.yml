@@ -93,7 +93,7 @@ yum_cache_min_space_mb: 8000   ## how many MB of free space should be in /var/yu
 ## general packages that are mandatory for Viya to work
 
 yum_packages_general:
-  - java
+  - java-1.8.0-openjdk
   - numactl
   - libXp.x86_64
   - libXp.i686

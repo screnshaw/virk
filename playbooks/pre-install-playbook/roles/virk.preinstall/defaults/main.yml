@@ -47,6 +47,11 @@ core_count_command: "echo $((`getconf _NPROCESSORS_ONLN` / (  `grep 'siblings' /
 ## SSH Max Startups
 maxstartups_val: 100
 
+## Linux 7.x systemd minimum required version
+systemd_7x_min_major: 219
+systemd_7x_min_minor: 30
+
+
 ## ulimit values
 ulimit_nofile_val: 150000
 ulimit_soft_nproc_val: 65536

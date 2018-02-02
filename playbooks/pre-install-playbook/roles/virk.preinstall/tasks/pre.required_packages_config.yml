@@ -66,26 +66,38 @@
       - packages
       - nicetohave
 
-  ## On Linux 7.x, verify that the systemd package on each machine is at version 219-30 or later.
+  ## On Linux 7.x, verify that the systemd package on each machine is at required version.
   - block:
 
     ##
-    ## this code needs to be improved.
-    ## it looks for version 219 only. lower or higher will fail.
+    ## Verify that systemd version meets minimum requirment
     ##
-    - name: obtain systemd version
-      shell: systemctl --version | head -n 1
-      register: systemd_version
+
+    - name: obtain systemd major version
+      shell: systemctl --version | grep systemd | awk '{print $2}'
+      register: systemd_major
       changed_when: False
       check_mode: no
 
-    - name: Display systemd version
-      debug: var=systemd_version
-      #when: systemd_version.stdout != "systemd 219"
+    - name: Display systemd major version
+      debug: var=systemd_major
 
-    - name: "Unexpected version of systemd: {{ systemd_version.stdout }}. Failing the playbook"
+    - name: "Unexpected version of systemd: {{ systemd_major.stdout }}. Failing the playbook"
       fail:
-      when: systemd_version.stdout != "systemd 219"
+      when: systemd_major.stdout <  systemd_7x_min_major
+
+    - name: obtain systemd minor version
+      shell: rpm systemd -q | sed 's/^[^-]*-\([0-9]*-[0-9]*\).*/\1/' | awk -F'[-]' '{print $2}'
+      register: systemd_minor
+      changed_when: False
+      check_mode: no
+
+    - name: Display systemd minor version
+      debug: var=systemd_minor
+
+    - name: "Unexpected minor version of systemd: {{ systemd_major.stdout }}-{{ systemd_minor.stdout }}. Failing the playbook"
+      fail:
+      when: systemd_major.stdout == systemd_7x_min_major and ( systemd_minor.stdout <  systemd_7x_min_minor )
 
     when: ansible_distribution_major_version == '7'
     tags:

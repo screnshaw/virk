@@ -87,7 +87,7 @@
       msg:
         - "We looked for the GID '{{item.item.gid}}'. (getent group {{item.item.gid}})"
         - "We found that this GID is already assigned but to the group '{{item.stdout}}'"
-        - "In your variables file, you stated that group '{{item.item.group}}' should have a GID of '{{item.item.gid}}', but it seems to already belong to group '{{item.item.group}}'"
+        - "In your variables file, you stated that group '{{item.item.group}}' should have a GID of '{{item.item.gid}}', but it seems to already belong to group '{{item.stdout}}'"
         - "Therefore, we are not making any changes. You can do one of the following:"
         - " - Review the content of the 'custom_group_list' variable to make it match your existing group(s)"
         - " - Add  -e 'create_local_cas_and_sas_accounts=false'   to the command so that it does not verify or create accounts"

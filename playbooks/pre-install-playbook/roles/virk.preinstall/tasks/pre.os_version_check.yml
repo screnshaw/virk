@@ -40,7 +40,6 @@
       msg:
         - "The OS of this server is not supported."
         - "Viya requires {{redhat_os_name}} {{os_major_version_1}} or {{os_major_version_2}}, (at least {{os_major_minor_version_1}} or {{os_major_minor_version_2}} ) "
-        - "or {{suse_os_name}} at least version {{suse_os_major_minor_version}}"
         - "You seem to have {{ansible_os_family}} {{ansible_distribution_version}}"
     when: ansible_os_family == redhat_os_name
 
@@ -51,8 +50,7 @@
         - ansible_distribution_version | version_compare(suse_os_major_minor_version, '>=')
       msg:
         - "The OS of this server is not supported."
-        - "Viya requires {{redhat_os_name}} {{os_major_version_1}} or {{os_major_version_2}}, (at least {{os_major_minor_version_1}} or {{os_major_minor_version_2}} ) "
-        - "or {{suse_os_name}} at least version {{suse_os_major_minor_version}}"
+        - "Viya requires {{suse_os_name}} at least version {{suse_os_major_minor_version}}"
         - "You seem to have {{ansible_os_family}} {{ansible_distribution_version}}"
     when: ansible_os_family == suse_os_name
 

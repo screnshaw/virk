@@ -63,7 +63,9 @@ ulimit_nofile_val: 150000
 ulimit_soft_nproc_val: 65536
 
 # dealing with ulimits:
-ulimit_file_loc: /etc/security/limits.d/viya_3.3_limits.conf
+default_ulimits_dir: /etc/security/limits.d
+ulimit_file_loc: /etc/security/limits.d/viya_3.4_limits.conf
+suse_ulimit_file_loc: /etc/security/viya_3.4_limits.conf
 ulimits:
   -
     comment: "#Added (1) for Viya Installation"

@@ -7,9 +7,10 @@ libXext_pkg: libXext
 libXmu_pkg: libXmu
 libXtst_pkg: libXtst
 browser: firefox
-ldapclient: openldap-client
+ldapclient: openldap-clients
 firewall: python-firewall
 
 # Firewall related names for SuSE/SLES
 firewall_service_path: /usr/lib/systemd/system/firewalld.service
 firewall_service_name: firewalld
+

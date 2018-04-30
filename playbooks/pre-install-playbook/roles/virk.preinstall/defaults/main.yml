@@ -157,7 +157,7 @@ nic_count_command: "ip link show up | grep -ve link -e ': lo:' | wc -l"
 
 
 ## third-party software requirements
-required_ansible_min_version: "2.2"
+required_ansible_min_version: "2.4"
 required_python_min_version: "2.6"
 
 
